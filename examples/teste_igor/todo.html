@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Todo App: Gun + Vue</title>
+    
+    <script src="https://unpkg.com/vue" type="text/javascript" charset="utf-8"></script>
+    <link href='https://fonts.googleapis.com/css?family=Alegreya+Sans:300italic' rel='stylesheet' type='text/css'>
+
+    <script src="/jquery.js"></script>
+    <script src="/gun.js"></script>
+    <script src="/gun/nts.js"></script>
+    <style>
+
+        body,
+        html {
+            width: 100%;
+            font-family: 'Alegreya Sans', sans-serif;
+        }
+
+        body {
+            font-size: 20px;
+            background-color: rgba(0,0,0,.3);
+        }
+
+        h1,
+        h3,
+        h5 {
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        #app {
+            margin: 0 auto;
+            background-color: #fff;
+            max-width: 500px;
+            padding: 2em;
+        }
+
+        .add-todo {
+            font-size: 1em;
+            border: 1px solid black;
+            padding: .5em .25em;
+        }
+
+        .completed-header,
+        .completed,
+        .completed-time {
+            color: rgba(0,0,0,.3);
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+
+        .completed-time {
+            font-size: .8em;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="app">
+    <input type="text" v-model="node">
+    <ul>
+        <li v-for="mensagem in mensagens">{{ mensagem }}</li>
+    </ul>
+    <form action="">
+        <input type="text" v-model="texto" class="what">
+        <button type="button" class="say" @click="submit()">click</button>
+    </form>
+</div>
+
+</body>
+
+<script>
+
+// Clear out local storage so we can start fresh each time.
+localStorage.clear();
+
+
+// No peers for the sake of example,
+// but this could easily be a collaborative 
+// todolist by adding a few peers
+var gun = Gun(location.origin + '/gun');
+
+new Vue({
+    data: {
+        todos: [],
+        texto: "",
+        chat: null,
+        node: 'conversess',
+        mensagens: [],
+        loc: location.origin,
+        time: Gun.time.is()
+    },
+    methods: {
+        submit() {
+            var msg = {when: Gun.time.is()};
+            msg.what = this.texto;
+
+            this.chat.set(msg);
+        },
+        render() {
+            var arr = []
+            this.chat.map().val(function(msg, id){
+                console.log("msg: ", msg);
+                if (msg.what && msg.what !== "")
+                    arr.push(msg.what);
+            });
+            this.mensagens = arr
+        }
+    },
+    mounted: function() {
+        this.chat = gun.get(this.node);
+        this.render()
+    }
+}).$mount('#app');
+
+</script>
+
+</html>

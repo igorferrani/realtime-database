@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Converse</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+		<link rel="stylesheet" type="text/css" href="/style.css">
+		<link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+		<style>
+			#converse {
+				font-size: 16pt;
+			}
+			#converse .box {
+				margin-bottom: 0.2em;
+				padding: 1em;
+				border-radius: 0.1em;
+			}
+			#converse b:after {
+				content: " ";
+			}
+			#converse li .when {
+				position: absolute;
+				top: 0;
+				right: -2em;
+				padding: 0.5em 1em;
+				background: rgba(100%,100%,100%,0.9);
+				opacity: 0;
+			}
+			#converse li:hover .when {
+				opacity: 1;
+				right: 0em;
+			}
+			.poiret {
+				font-family: 'Poiret One', sans-serif;
+			}
+			.large {
+				font-size: 200%;
+			}
+			#converse .what, #converse .who {
+				cursor: text;
+				outline: none;
+				display: inline;
+				min-width: 1em;
+				padding-left: 1px;
+			}
+			[contentEditable=true]:empty:not(:focus):before{
+				content:attr(data-text)
+			}
+
+			#title {
+				margin-bottom: 0.5em;
+			}
+
+			.say {
+				margin: 0 0 0.4em 0.4em;
+				padding: 0.2em 0.5em;
+			}
+
+			 #name-input {
+				 margin-top: 0.5em;
+				 margin-right: 0.5em;
+			 }
+
+			 #message-input {
+				 margin-top: 0.5em;
+			 }
+		</style>
+  </head>
+	<body>
+		<form action="">
+			<input type="text" id="texto" class="what">
+			<button type="button" class="say">click</button>
+		</form>
+		
+
+		<script src="/jquery.js"></script>
+		<script src="/gun.js"></script>
+		<script src="/gun/nts.js"></script>
+		<script>
+			
+
+			$("form .say").on('click', submit);
+			$("form .what").on('keydown', enter);
+
+
+			function enter(e){
+				if(e.which !== 13){ return }
+				submit(e);
+			}
+			function submit(e){
+				e.preventDefault();
+
+				
+			}
+
+			chat.map().val(function(msg, id){
+				console.log("mensagem: ", msg.what)
+			});
+		</script>
+	</body>
+</html>
